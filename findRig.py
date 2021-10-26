@@ -24,20 +24,24 @@
 import sys
 from os import listdir
 from rig_io.direct_io import *
+import argparse
 
 ############################################################################
 
 # User params
 PATH='/dev/serial/by-id'
-VERBOSITY=0
+#VERBOSITY=0
 
 ############################################################################
 
 if VERBOSITY>0:
     print("Hello World!")
 
-#onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-#sock = socket_io.open_rig_connection('DIRECT',0,0,0,'findRig')
+arg_proc = argparse.ArgumentParser()
+arg_proc.add_argument("-verbosity", help="VERBOSITY",
+                              type=int,default=0)
+args = arg_proc.parse_args()
+VERBOSITY=args.verbosity
 
 # Get list of USB ports
 try:
@@ -46,17 +50,27 @@ except:
     files=[]
 
 if VERBOSITY>0:
-    print('Files=',files)    
+    print('\nUSB ports found:')
+    for f in files:
+        print(f)    
 
 # Sift through list of usb ports
 for f in files:
     port=PATH+'/'+f
     if VERBOSITY>0:
-        print('\n'+port)
+        print('\n------------------------------------------------')
+        print('Trying port',port,'...')
+
+    # Skip over the obvious
+    if 'GPS' in f or 'arduino' in f:
+        if VERBOSITY>0:
+            print('... skipping this one')
+        continue
 
     # The modern rigs have been set to operate at 38400 but my 
     # old TS850 can only go up to 4800 bps
-    for baud in [38400,4800]:
+    #for baud in [38400,4800]:
+    for baud in [38400]:
 
         # Try to illicit a response from a rig on this port
         rig=try_port(port,baud,VERBOSITY)
@@ -66,9 +80,9 @@ for f in files:
             print(rig[1])
             sock = rig[2]
             if rig[1]=='IC9700':
-                # Set time
-                #sock = direct_connect(0,0)
-                sock.set_date_time()
+                # Set time - why ????!!!!
+                #sock.set_date_time()
+                pass
             elif rig[1]=='FTdx3000':
                 # Make sure full-power and ant tuner is on
                 sock.set_power(99)

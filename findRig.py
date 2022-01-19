@@ -54,6 +54,8 @@ arg_proc.add_argument("-PWR", help="Rig Power",
                       type=int,default=None)
 arg_proc.add_argument("-MON", help="Monitor Level",
                       type=int,default=None)
+arg_proc.add_argument("-TUNER", help="Tuner On/Off",
+                      type=int,default=None)
 arg_proc.add_argument("-w", help="Rig command",
                       type=str,default=None)
 arg_proc.add_argument("-verbosity", help="VERBOSITY",
@@ -77,6 +79,7 @@ SET_FILT  = args.FILT
 RUN_CMD   = args.w
 SET_PWR   = args.PWR
 SET_MON   = args.MON
+SET_TUNER = args.TUNER
 
 VERBOSITY = args.verbosity
 
@@ -164,23 +167,26 @@ if VERBOSITY>0:
     print(sock.rig_type1)
     print(sock.rig_type2)
     
-if GET_MODE:
+if GET_MODE!=None:
     mode=sock.get_mode()
     print(mode)
 
-if SET_MODE:
+if SET_MODE!=None:
     sock.set_mode(SET_MODE)
     
-if SET_FILT:
+if SET_FILT!=None:
     sock.set_filter(SET_FILT)
     
-if SET_PWR:
+if SET_PWR!=None:
     sock.set_power(SET_PWR)
     
-if SET_MON:
+if SET_MON!=None:
     sock.set_monitor_gain(SET_MON)
     
-if RUN_CMD:
+if SET_TUNER!=None:
+    sock.tuner(SET_TUNER)
+    
+if RUN_CMD!=None:
     if rig in ["FTdx3000","FT991a"]:
         RUN_CMD=RUN_CMD.replace("'","")+';'
     print('cmd=',RUN_CMD)

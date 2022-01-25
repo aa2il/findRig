@@ -1,0 +1,14 @@
+#! /bin/tcsh
+
+# Script to test findRig param setter
+
+set RIG="FTdx3000"
+#set RIG="IC9700"
+
+set CONNECTION="DIRECT"
+#set CONNECTION="FLRIG"
+
+#findRig.py -rig $CONNECTION $RIG -m
+findRig.py -rig $CONNECTION $RIG -PAMP 0 -ATTEN 0
+
+

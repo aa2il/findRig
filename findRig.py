@@ -56,6 +56,10 @@ arg_proc.add_argument("-MON", help="Monitor Level",
                       type=int,default=None)
 arg_proc.add_argument("-TUNER", help="Tuner On/Off",
                       type=int,default=None)
+arg_proc.add_argument("-PAMP", help="Set Pre-amp",
+                      type=int,default=None)
+arg_proc.add_argument("-ATTEN", help="Set Attenuator",
+                      type=int,default=None)
 arg_proc.add_argument("-w", help="Rig command",
                       type=str,default=None)
 arg_proc.add_argument("-verbosity", help="VERBOSITY",
@@ -80,6 +84,10 @@ RUN_CMD   = args.w
 SET_PWR   = args.PWR
 SET_MON   = args.MON
 SET_TUNER = args.TUNER
+SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None
+
+print('Hey:',args.m,GET_MODE)
+#print('Hey:',args.PAMP,args.ATTEN,SET_FRONT_END)
 
 VERBOSITY = args.verbosity
 
@@ -167,9 +175,9 @@ if VERBOSITY>0:
     print(sock.rig_type1)
     print(sock.rig_type2)
     
-if GET_MODE!=None:
+if GET_MODE:
     mode=sock.get_mode()
-    print(mode)
+    print('mode=',mode)
 
 if SET_MODE!=None:
     sock.set_mode(SET_MODE)
@@ -185,6 +193,9 @@ if SET_MON!=None:
     
 if SET_TUNER!=None:
     sock.tuner(SET_TUNER)
+    
+if SET_FRONT_END:
+    sock.frontend(1,args.PAMP,args.ATTEN)
     
 if RUN_CMD!=None:
     if rig in ["FTdx3000","FT991a"]:

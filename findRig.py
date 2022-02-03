@@ -43,7 +43,8 @@ arg_proc.add_argument("-rig", help="Connection Type",
                       choices=CONNECTIONS+['NONE']+RIGS)
 arg_proc.add_argument("-port", help="Connection Port",
                       type=int,default=0)
-arg_proc.add_argument("-m", help="Get rig mode",action='store_true')
+arg_proc.add_argument("-m", help="Get rig mode",
+                      action='store_true')
 arg_proc.add_argument("-M", help="Set rig mode",
                       type=str,default=None,
                       choices=['CW','SSB','RTTY'])
@@ -60,6 +61,8 @@ arg_proc.add_argument("-PAMP", help="Set Pre-amp",
                       type=int,default=None)
 arg_proc.add_argument("-ATTEN", help="Set Attenuator",
                       type=int,default=None)
+arg_proc.add_argument("-A2B", help="Copy VFO A to VFO B",
+                      action='store_true')
 arg_proc.add_argument("-w", help="Rig command",
                       type=str,default=None)
 arg_proc.add_argument("-verbosity", help="VERBOSITY",
@@ -85,6 +88,7 @@ SET_PWR   = args.PWR
 SET_MON   = args.MON
 SET_TUNER = args.TUNER
 SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None
+COPY_A2B  = args.A2B
 
 print('Hey:',args.m,GET_MODE)
 #print('Hey:',args.PAMP,args.ATTEN,SET_FRONT_END)
@@ -196,6 +200,10 @@ if SET_TUNER!=None:
     
 if SET_FRONT_END:
     sock.frontend(1,args.PAMP,args.ATTEN)
+
+if COPY_A2B:
+    sock.get_response('BY;AB;')
+    #sock.set_vfo(op='A->B')
     
 if RUN_CMD!=None:
     if rig in ["FTdx3000","FT991a"]:

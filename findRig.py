@@ -23,9 +23,9 @@
 
 import sys
 from os import listdir
-from rig_io.direct_io import *
-import argparse
-import rig_io.socket_io as socket_io
+from rig_io.direct_io import try_port
+#import rig_io.socket_io as socket_io
+from params import *
 
 ############################################################################
 
@@ -34,79 +34,20 @@ PATH='/dev/serial/by-id'
 
 ############################################################################
 
-if VERBOSITY>0:
-    print("Hello World!")
+P=PARAMS()
 
-arg_proc = argparse.ArgumentParser()
-arg_proc.add_argument("-rig", help="Connection Type",
-                      type=str,default=None,nargs='+',
-                      choices=CONNECTIONS+['NONE']+RIGS)
-arg_proc.add_argument("-port", help="Connection Port",
-                      type=int,default=0)
-arg_proc.add_argument("-m", help="Get rig mode",
-                      action='store_true')
-arg_proc.add_argument("-M", help="Set rig mode",
-                      type=str,default=None,
-                      choices=['CW','SSB','RTTY'])
-arg_proc.add_argument("-FILT", help="Set rig filter",
-                      type=str,default=None,
-                      choices=['Narrow','Wide'])
-arg_proc.add_argument("-PWR", help="Rig Power",
-                      type=int,default=None)
-arg_proc.add_argument("-MON", help="Monitor Level",
-                      type=int,default=None)
-arg_proc.add_argument("-TUNER", help="Tuner On/Off",
-                      type=int,default=None)
-arg_proc.add_argument("-PAMP", help="Set Pre-amp",
-                      type=int,default=None)
-arg_proc.add_argument("-ATTEN", help="Set Attenuator",
-                      type=int,default=None)
-arg_proc.add_argument("-A2B", help="Copy VFO A to VFO B",
-                      action='store_true')
-arg_proc.add_argument("-w", help="Rig command",
-                      type=str,default=None)
-arg_proc.add_argument("-verbosity", help="VERBOSITY",
-                      type=int,default=0)
-args = arg_proc.parse_args()
-
-if not args.rig:
-    connection = None
-    rig        = None
-else:
-    connection    = args.rig[0]
-    if len(args.rig)>=2:
-        rig       = args.rig[1]
-    else:
-        rig       = None
-PORT      = args.port
-
-GET_MODE  = args.m
-SET_MODE  = args.M
-SET_FILT  = args.FILT
-RUN_CMD   = args.w
-SET_PWR   = args.PWR
-SET_MON   = args.MON
-SET_TUNER = args.TUNER
-SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None
-COPY_A2B  = args.A2B
-
-print('Hey:',args.m,GET_MODE)
-#print('Hey:',args.PAMP,args.ATTEN,SET_FRONT_END)
-
-VERBOSITY = args.verbosity
-
-############################################################################
-
-if VERBOSITY>0:
+if P.VERBOSITY>0:
     print("\n\n***********************************************************************************")
     print("\nStarting findRig  ...")
-    print('connection=',connection)
+    print("P=")
+    pprint(vars(P))
 
 # If a rig has been specified, connect to it
-if connection:
+if P.connection:
     
-    sock = socket_io.open_rig_connection(connection,0,PORT,0,'PROBE',rig=rig)
-    if not sock.active:
+    P.sock = socket_io.open_rig_connection(P.connection,0,P.PORT,0,
+                                           'PROBE',rig=P.rig)
+    if not P.sock.active:
         print('*** No connection available to rig ***')
         sys.exit(0)
 
@@ -118,7 +59,8 @@ else:
     except:
         files=[]
 
-    if VERBOSITY>0:
+    if P.VERBOSITY>0:
+        print('rig=',P.rig)
         print('\nUSB ports found:')
         for f in files:
             print(f)    
@@ -126,13 +68,13 @@ else:
     # Sift through list of usb ports
     for f in files:
         port=PATH+'/'+f
-        if VERBOSITY>0:
+        if P.VERBOSITY>0:
             print('\n------------------------------------------------')
             print('Trying port',port,'...')
 
         # Skip over the obvious
         if 'GPS' in f or 'arduino' in f:
-            if VERBOSITY>0:
+            if P.VERBOSITY>0:
                 print('... skipping this one')
             continue
 
@@ -142,74 +84,84 @@ else:
         for baud in [38400]:
 
             # Try to illicit a response from a rig on this port
-            rig=try_port(port,baud,VERBOSITY)
+            rig=try_port(port,baud,P.VERBOSITY)
             if rig:
 
                 # Found it - print out rig type, do any inits and exit
-                print(rig[1])
-                if VERBOSITY>0:
+                if P.VERBOSITY>0:
                     print('rig=',rig)
                     #print('rig0=',rig[0])
                     #print('rig1=',rig[1])
                     #print('rig2=',rig[2])
                     
-                sock = rig[2]
+                P.sock = rig[2]
                 if rig[1]=='IC9700':
                     # Set time - why ????!!!!
                     #sock.set_date_time()
                     pass
                 elif rig[1]=='FTdx3000':
                     # Make sure full-power and ant tuner is on
-                    sock.set_power(99)
-                    sock.tuner(1)
-                    sock.get_response('BY;EX177100;')         # Make sure max TX is also set
+                    P.sock.set_power(99)
+                    P.sock.tuner(1)
+                    P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set
                 elif rig[1]=='FT991a':
                     # Turn off split mode - this rig seems to get into split quite a bit
                     #print('Hey')
-                    sock.split_mode(0)
+                    P.sock.split_mode(0)
                 
-            #sys.exit(0)
-            break
+                #sys.exit(0)
+                rig=rig[1]
+                break
+        else:
+            continue         # Iterate outer loop if we didn't break
+        break                # Quit outer loop if we did break
 
-
-# Do any inits
-if VERBOSITY>0:
-    print('\nRig inits ...')
-    print(rig)
-    print(sock.rig_type1)
-    print(sock.rig_type2)
+# Print final result or None if nothing found
+print(rig)
     
-if GET_MODE:
-    mode=sock.get_mode()
+# Do any inits
+if P.VERBOSITY>0:
+    print('\nRig inits ...')
+    print('rig=',rig)
+    if sock:
+        print(sock.rig_type1)
+        print(sock.rig_type2)
+    
+if P.GET_MODE:
+    mode=P.sock.get_mode()
     print('mode=',mode)
 
-if SET_MODE!=None:
-    sock.set_mode(SET_MODE)
+if P.SET_MODE!=None:
+    P.sock.set_mode(P.SET_MODE)
     
-if SET_FILT!=None:
-    sock.set_filter(SET_FILT)
+if P.SET_FILT!=None:
+    P.sock.set_filter(P.SET_FILT)
     
-if SET_PWR!=None:
-    sock.set_power(SET_PWR)
+if P.SET_PWR!=None:
+    P.sock.set_power(P.SET_PWR)
     
-if SET_MON!=None:
-    sock.set_monitor_gain(SET_MON)
+if P.SET_MON!=None:
+    P.sock.set_monitor_gain(P.SET_MON)
     
-if SET_TUNER!=None:
-    sock.tuner(SET_TUNER)
+if P.SET_TUNER!=None:
+    P.sock.tuner(P.SET_TUNER)
     
-if SET_FRONT_END:
-    sock.frontend(1,args.PAMP,args.ATTEN)
+if P.SET_FRONT_END:
+    sock.frontend(1,P.PAMP,P.ATTEN)
 
-if COPY_A2B:
+if P.COPY_A2B:
     sock.get_response('BY;AB;')
     #sock.set_vfo(op='A->B')
     
-if RUN_CMD!=None:
+if P.RUN_CMD!=None:
+    #print('rig=',rig)
     if rig in ["FTdx3000","FT991a"]:
         RUN_CMD=RUN_CMD.replace("'","")+';'
-    print('cmd=',RUN_CMD)
-    reply=sock.get_response(RUN_CMD)
-    print('reply=',reply)
+    #print('cmd=',RUN_CMD)
+    if sock:
+        reply=P.sock.get_response(RUN_CMD)
+    else:
+        reply=None
+    print(reply)
     
     

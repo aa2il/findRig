@@ -1,3 +1,4 @@
 /save*/*
 /DIFFS
 /#*
+/__pycache__/*

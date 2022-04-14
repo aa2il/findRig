@@ -26,6 +26,7 @@ from os import listdir
 from rig_io.direct_io import try_port
 #import rig_io.socket_io as socket_io
 from params import *
+from pprint import pprint
 
 ############################################################################
 

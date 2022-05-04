@@ -27,11 +27,33 @@ from rig_io.direct_io import try_port
 import rig_io.socket_io as socket_io
 from params import *
 from pprint import pprint
+import serial.tools.list_ports
+from rig_io.ft_tables import DEVICE_IDs
 
 ############################################################################
 
 # User params
 PATH='/dev/serial/by-id'
+
+############################################################################
+
+def find_serial_device(rig,verbosity=0):
+    devs=[]
+    ports = serial.tools.list_ports.comports()
+    
+    for port, desc, hwid, in sorted(ports):
+        if verbosity>0:
+            print("{}: {} [{}]".format(port, desc, hwid))
+        if DEVICE_IDs[rig] in hwid:
+            devs.append(port)
+            if verbosity>0:
+                print('*** There it is ***')
+
+    if verbosity>0:
+        print('devs=',devs)
+
+    return devs
+    
 
 ############################################################################
 
@@ -43,15 +65,27 @@ if P.VERBOSITY>0:
     print("P=")
     pprint(vars(P))
 
-# If a rig has been specified, connect to it
+# If a rig & connection have been specified, connect to it, presumably to
+# send it some commands
 if P.connection:
     
     P.sock = socket_io.open_rig_connection(P.connection,0,P.PORT,0,
                                            'PROBE',rig=P.rig)
+    
     if not P.sock.active:
         print('*** No connection available to rig ***')
         sys.exit(0)
+    rig=P.rig
 
+# If a rig has been specified, find its serial port(s)
+# Need to sort out logic - see start_flrig
+elif P.rig and False:
+    
+    devs=find_serial_device(P.rig)
+    for dev in devs:
+        print(dev)
+    sys.exit(0)    
+    
 else:
     
     # No conenction specified - get list of USB ports
@@ -124,9 +158,9 @@ print(rig)
 if P.VERBOSITY>0:
     print('\nRig inits ...')
     print('rig=',rig)
-    if sock:
-        print(sock.rig_type1)
-        print(sock.rig_type2)
+    if P.sock:
+        print(P.sock.rig_type1)
+        print(P.sock.rig_type2)
     
 if P.GET_MODE:
     mode=P.sock.get_mode()
@@ -157,10 +191,10 @@ if P.COPY_A2B:
 if P.RUN_CMD!=None:
     #print('rig=',rig)
     if rig in ["FTdx3000","FT991a"]:
-        RUN_CMD=RUN_CMD.replace("'","")+';'
-    #print('cmd=',RUN_CMD)
-    if sock:
-        reply=P.sock.get_response(RUN_CMD)
+        P.RUN_CMD=P.RUN_CMD.replace("'","")+';'
+    #print('cmd=',P.RUN_CMD)
+    if P.sock:
+        reply=P.sock.get_response(P.RUN_CMD)
     else:
         reply=None
     print(reply)

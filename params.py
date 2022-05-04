@@ -21,7 +21,7 @@
 ################################################################################
 
 import argparse
-from rig_io.ft_tables import CONNECTIONS,RIGS
+from rig_io.ft_tables import CONNECTIONS,RIGS,ACCESSORIES
 
 ################################################################################
 
@@ -103,5 +103,7 @@ class PARAMS:
         #print('Hey:',args.PAMP,args.ATTEN,SET_FRONT_END)
 
         self.VERBOSITY = args.verbosity
+
+        self.sock=None
 
         self.sock = None

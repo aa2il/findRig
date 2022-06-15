@@ -69,6 +69,9 @@ if P.VERBOSITY>0:
 # send it some commands
 if P.connection:
     
+    if P.VERBOSITY>0:
+        print('\nOpening',P.connection,' connection to rig',
+              P.rig,' on port',P.PORT,'...')
     P.sock = socket_io.open_rig_connection(P.connection,0,P.PORT,0,
                                            'PROBE',rig=P.rig)
     
@@ -159,8 +162,8 @@ if P.VERBOSITY>0:
     print('\nRig inits ...')
     print('rig=',rig)
     if P.sock:
-        print(P.sock.rig_type1)
-        print(P.sock.rig_type2)
+        print('rig_type1=',P.sock.rig_type1)
+        print('rig_type2=',P.sock.rig_type2)
     
 if P.GET_MODE:
     mode=P.sock.get_mode()

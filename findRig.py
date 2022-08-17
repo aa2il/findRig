@@ -156,7 +156,7 @@ else:
 
 # Print final result or None if nothing found
 print(rig)
-    
+
 # Do any inits
 if P.VERBOSITY>0:
     print('\nRig inits ...')
@@ -179,16 +179,23 @@ if P.SET_PWR!=None:
     P.sock.set_power(P.SET_PWR)
     
 if P.SET_MON!=None:
+    #print('SET_MON=',P.SET_MON)
     P.sock.set_monitor_gain(P.SET_MON)
+    
+if P.SET_BREAK!=None:
+    #print('rig=',rig)
+    #print('SET_BREAK=',P.SET_BREAK)
+    cmd='BY;BI'+str(P.SET_BREAK)+';'
+    P.sock.get_response(cmd)
     
 if P.SET_TUNER!=None:
     P.sock.tuner(P.SET_TUNER)
     
 if P.SET_FRONT_END:
-    sock.frontend(1,P.PAMP,P.ATTEN)
+    P.sock.frontend(1,P.PAMP,P.ATTEN)
 
 if P.COPY_A2B:
-    sock.get_response('BY;AB;')
+    P.sock.get_response('BY;AB;')
     #sock.set_vfo(op='A->B')
     
 if P.RUN_CMD!=None:

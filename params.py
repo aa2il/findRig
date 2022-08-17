@@ -57,6 +57,8 @@ class PARAMS:
                               type=int,default=None)
         arg_proc.add_argument("-MON", help="Monitor Level",
                               type=int,default=None)
+        arg_proc.add_argument("-BREAK", help="Break-in on/off",
+                              type=int,default=None)
         arg_proc.add_argument("-TUNER", help="Tuner On/Off",
                               type=int,default=None)
         arg_proc.add_argument("-PAMP", help="Set Pre-amp",
@@ -93,6 +95,7 @@ class PARAMS:
         self.RUN_CMD   = args.w
         self.SET_PWR   = args.PWR
         self.SET_MON   = args.MON
+        self.SET_BREAK = args.BREAK
         self.SET_TUNER = args.TUNER
         self.SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None
         self.COPY_A2B  = args.A2B

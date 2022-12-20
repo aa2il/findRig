@@ -33,7 +33,7 @@ from rig_io.ft_tables import DEVICE_IDs
 ############################################################################
 
 # User params
-PATH='/dev/serial/by-id'
+DEV_PATH='/dev/serial/by-id'
 
 ############################################################################
 
@@ -93,7 +93,7 @@ else:
     
     # No conenction specified - get list of USB ports
     try:
-        files = listdir(PATH)
+        files = listdir(DEV_PATH)
     except:
         files=[]
 
@@ -105,7 +105,7 @@ else:
 
     # Sift through list of usb ports
     for f in files:
-        port=PATH+'/'+f
+        port=DEV_PATH+'/'+f
         if P.VERBOSITY>0:
             print('\n------------------------------------------------')
             print('Trying port',port,'...')
@@ -158,6 +158,11 @@ else:
 print(rig)
 
 # Do any inits
+if P.sock:
+    if P.sock.rig_type=='FLRIG':
+        if P.sock.rig_type2=='UNKNOWN':
+            P.sock.rig_type2=rig
+            
 if P.VERBOSITY>0:
     print('\nRig inits ...')
     print('rig=',rig)
@@ -173,7 +178,7 @@ if P.SET_MODE!=None:
     P.sock.set_mode(P.SET_MODE)
     
 if P.SET_FILT!=None:
-    P.sock.set_filter(P.SET_FILT)
+    P.sock.set_filter(P.SET_FILT,P.SET_MODE)
     
 if P.SET_PWR!=None:
     P.sock.set_power(P.SET_PWR)
@@ -182,7 +187,7 @@ if P.SET_MON!=None:
     #print('SET_MON=',P.SET_MON)
     P.sock.set_monitor_gain(P.SET_MON)
     
-if P.SET_BREAK!=None:
+if P.sock and P.SET_BREAK!=None:
     #print('rig=',rig)
     #print('SET_BREAK=',P.SET_BREAK)
     cmd='BY;BI'+str(P.SET_BREAK)+';'

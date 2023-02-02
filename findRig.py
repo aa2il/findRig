@@ -2,7 +2,7 @@
 ############################################################################
 #
 # Find Rig - Rev 1.0
-# Copyright (C) 2021 by Joseph B. Attili, aa2il AT arrl DOT net
+# Copyright (C) 2021-3 by Joseph B. Attili, aa2il AT arrl DOT net
 #
 # Script to determine rig type attached to a serial port and do any common
 # inits.
@@ -28,7 +28,8 @@ import rig_io.socket_io as socket_io
 from params import *
 from pprint import pprint
 import serial.tools.list_ports
-from rig_io.ft_tables import DEVICE_IDs
+from rig_io.ft_tables import RIGS
+from utilities import find_serial_device
 
 ############################################################################
 
@@ -37,27 +38,8 @@ DEV_PATH='/dev/serial/by-id'
 
 ############################################################################
 
-def find_serial_device(rig,verbosity=0):
-    devs=[]
-    ports = serial.tools.list_ports.comports()
-    
-    for port, desc, hwid, in sorted(ports):
-        if verbosity>0:
-            print("{}: {} [{}]".format(port, desc, hwid))
-        if DEVICE_IDs[rig] in hwid:
-            devs.append(port)
-            if verbosity>0:
-                print('*** There it is ***')
-
-    if verbosity>0:
-        print('devs=',devs)
-
-    return devs
-    
-
-############################################################################
-
 P=PARAMS()
+rig=None
 
 if P.VERBOSITY>0:
     print("\n\n***********************************************************************************")
@@ -68,7 +50,7 @@ if P.VERBOSITY>0:
 # If a rig & connection have been specified, connect to it, presumably to
 # send it some commands
 if P.connection:
-    
+
     if P.VERBOSITY>0:
         print('\nOpening',P.connection,' connection to rig',
               P.rig,' on port',P.PORT,'...')
@@ -80,17 +62,55 @@ if P.connection:
         sys.exit(0)
     rig=P.rig
 
-# If a rig has been specified, find its serial port(s)
-# Need to sort out logic - see start_flrig
-elif P.rig and False:
+elif True:
+
+    # This works on windoz & linux - New pathway
+    for rig_name in RIGS:
+        if rig_name[0:2]=='IC':
+            ICOM=True
+        else:
+            ICOM=False
+        port=find_serial_device(rig_name,0,VERBOSITY=P.VERBOSITY)
+        for baud in [38400]:
+
+            # Try to illicit a response from a rig on this port
+            rig=try_port(port,baud,P.VERBOSITY,ICOM=ICOM)
+            if P.VERBOSITY>0:
+                print('rig_name=',rig_name,'\tport=',port,'\trig=',rig)
+            if rig:
+
+                # Found it - print out rig type, do any inits and exit
+                if P.VERBOSITY>0:
+                    print('rig=',rig)
+                    #print('rig0=',rig[0])
+                    #print('rig1=',rig[1])
+                    #print('rig2=',rig[2])
+                    
+                P.sock = rig[2]
+                if rig[1]=='IC9700':
+                    # Set time - why ????!!!!
+                    #sock.set_date_time()
+                    pass
+                elif rig[1]=='FTdx3000':
+                    # Make sure full-power and ant tuner is on
+                    P.sock.set_power(99)
+                    P.sock.tuner(1)
+                    P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set
+                elif rig[1]=='FT991a':
+                    # Turn off split mode - this rig seems to get into split quite a bit
+                    #print('Hey')
+                    P.sock.split_mode(0)
+                
+                #sys.exit(0)
+                rig=rig[1]
+                break
+        else:
+            continue         # Iterate outer loop if we didn't break
+        break                # Quit outer loop if we did break
+
+else:          
     
-    devs=find_serial_device(P.rig)
-    for dev in devs:
-        print(dev)
-    sys.exit(0)    
-    
-else:
-    
+    # Old pathway
     # No conenction specified - get list of USB ports
     try:
         files = listdir(DEV_PATH)

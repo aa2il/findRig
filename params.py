@@ -39,6 +39,7 @@ class PARAMS:
         arg_proc.add_argument('Rigs', metavar='Rigs',
                               type=str, nargs='*', default=None,
                               help='Rig to check for')
+        #                              choices=RIGS+ACCESSORIES+['NONE'],
 
         arg_proc.add_argument("-rig", help="Connection Type",
                               type=str,default=None,nargs='+',
@@ -107,6 +108,6 @@ class PARAMS:
 
         self.VERBOSITY = args.verbosity
 
-        self.sock=None
+        self.sock = None
 
         self.sock = None

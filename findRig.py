@@ -77,6 +77,7 @@ elif True:
             rig=try_port(port,baud,P.VERBOSITY,ICOM=ICOM)
             if P.VERBOSITY>0:
                 print('rig_name=',rig_name,'\tport=',port,'\trig=',rig)
+
             if rig:
 
                 # Found it - print out rig type, do any inits and exit
@@ -93,9 +94,12 @@ elif True:
                     pass
                 elif rig[1]=='FTdx3000':
                     # Make sure full-power and ant tuner is on
-                    P.sock.set_power(99)
-                    P.sock.tuner(1)
-                    P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set
+                    try:
+                        P.sock.set_power(99)
+                        P.sock.tuner(1)
+                        P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set
+                    except:
+                        break
                 elif rig[1]=='FT991a':
                     # Turn off split mode - this rig seems to get into split quite a bit
                     #print('Hey')
@@ -175,6 +179,8 @@ else:
         break                # Quit outer loop if we did break
 
 # Print final result or None if nothing found
+if type(rig)==list:
+    rig=rig[1]
 print(rig)
 
 # Do any inits

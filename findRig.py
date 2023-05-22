@@ -28,7 +28,6 @@ import rig_io.socket_io as socket_io
 from params import *
 from pprint import pprint
 import serial.tools.list_ports
-from rig_io.ft_tables import RIGS
 from utilities import find_serial_device
 
 ############################################################################
@@ -64,8 +63,11 @@ if P.connection:
 
 elif True:
 
+    if P.VERBOSITY>0:
+        print('P.rig=',P.rig)
+    
     # This works on windoz & linux - New pathway
-    for rig_name in RIGS:
+    for rig_name in P.rig:
         if rig_name[0:2]=='IC':
             ICOM=True
         else:

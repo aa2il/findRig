@@ -2,7 +2,7 @@
 ################################################################################
 #
 # Params.py - Rev 1.0
-# Copyright (C) 2021 by Joseph B. Attili, aa2il AT arrl DOT net
+# Copyright (C) 2021-3 by Joseph B. Attili, aa2il AT arrl DOT net
 #
 # Command line param parser for pyKeyer.
 #
@@ -21,7 +21,7 @@
 ################################################################################
 
 import argparse
-from rig_io.ft_tables import CONNECTIONS,RIGS,ACCESSORIES
+from rig_io.ft_tables import CONNECTIONS,RIGS,ACCESSORIES,RIGS
 
 ################################################################################
 
@@ -78,17 +78,17 @@ class PARAMS:
 
         if len(args.Rigs)>0:
             self.connection = None
-            self.rig  = args.Rigs[0]
+            self.rig  = args.Rigs
             self.PORT = self.rig
         elif args.rig:
             self.connection    = args.rig[0]
             if len(args.rig)>=2:
                 self.rig       = args.rig[1]
             else:
-                self.rig       = None
+                self.rig       = RIGS
         else:
             self.connection = None
-            self.rig        = None
+            self.rig        = RIGS
     
         self.GET_MODE  = args.m
         self.SET_MODE  = args.M

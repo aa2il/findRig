@@ -209,10 +209,13 @@ if P.SET_FILT!=None:
     P.sock.set_filter(P.SET_FILT,P.SET_MODE)
     
 if P.SET_PWR!=None:
+    if P.VERBOSITY>0:
+        print('SET_PWR=',P.SET_PWR)
     P.sock.set_power(P.SET_PWR)
     
 if P.SET_MON!=None:
-    #print('SET_MON=',P.SET_MON)
+    if P.VERBOSITY>0:
+        print('SET_MON=',P.SET_MON)
     P.sock.set_monitor_gain(P.SET_MON)
     
 if P.sock and P.SET_BREAK!=None:
@@ -222,6 +225,8 @@ if P.sock and P.SET_BREAK!=None:
     P.sock.get_response(cmd)
     
 if P.SET_TUNER!=None:
+    if P.VERBOSITY>0:
+        print('SET_TUNER=',P.SET_TUNER)
     P.sock.tuner(P.SET_TUNER)
     
 if P.SET_FRONT_END:

@@ -61,6 +61,13 @@ if P.connection:
         sys.exit(0)
     rig=P.rig
 
+    if P.VERBOSITY>0:
+        print('P.rig=',P.rig)
+        print('rig_type =',P.sock.rig_type)
+        print('rig_type1=',P.sock.rig_type1)
+        print('rig_type2=',P.sock.rig_type2)
+        #sys.exit(0)
+    
 elif True:
 
     if P.VERBOSITY>0:
@@ -186,7 +193,7 @@ if type(rig)==list:
 print(rig)
 
 # Do any inits
-if P.sock:
+if P.sock and False:
     if P.sock.rig_type=='FLRIG':
         if P.sock.rig_type2=='UNKNOWN':
             P.sock.rig_type2=rig
@@ -195,52 +202,62 @@ if P.VERBOSITY>0:
     print('\nRig inits ...')
     print('rig=',rig)
     if P.sock:
+        print('rig_type =',P.sock.rig_type)
         print('rig_type1=',P.sock.rig_type1)
         print('rig_type2=',P.sock.rig_type2)
     
 if P.GET_MODE:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Getting mode ...')
     mode=P.sock.get_mode()
     print('mode=',mode)
 
 if P.SET_MODE!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Setting mode ...')
     P.sock.set_mode(P.SET_MODE)
     
 if P.SET_FILT!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Setting filter ...')
     P.sock.set_filter(P.SET_FILT,P.SET_MODE)
     
 if P.SET_PWR!=None:
     if P.VERBOSITY>0:
-        print('SET_PWR=',P.SET_PWR)
+        print('FIND RIG: SETTING POWER=',P.SET_PWR)
     P.sock.set_power(P.SET_PWR)
     
 if P.SET_MON!=None:
     if P.VERBOSITY>0:
-        print('SET_MON=',P.SET_MON)
+        print('FIND RIG: SETTTNG MONITOR=',P.SET_MON)
     P.sock.set_monitor_gain(P.SET_MON)
     
 if P.sock and P.SET_BREAK!=None:
-    #print('rig=',rig)
-    #print('SET_BREAK=',P.SET_BREAK)
-    cmd='BY;BI'+str(P.SET_BREAK)+';'
-    P.sock.get_response(cmd)
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTING BREAK-IN=',P.SET_BREAK)
+    P.sock.set_breakin(P.SET_BREAK)
     
 if P.SET_TUNER!=None:
     if P.VERBOSITY>0:
-        print('SET_TUNER=',P.SET_TUNER)
+        print('FIND RIG: SETTING TUNER=',P.SET_TUNER)
     P.sock.tuner(P.SET_TUNER)
     
 if P.SET_FRONT_END:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTING FRONT END=',P.AMP,P.ATTEN)
     P.sock.frontend(1,P.PAMP,P.ATTEN)
 
 if P.COPY_A2B:
+    if P.VERBOSITY>0:
+        print('FIND RIG: COPY a to B ...')
     P.sock.get_response('BY;AB;')
     #sock.set_vfo(op='A->B')
     
 if P.RUN_CMD!=None:
-    #print('rig=',rig)
     if rig in ["FTdx3000","FT991a"]:
         P.RUN_CMD=P.RUN_CMD.replace("'","")+';'
-    #print('cmd=',P.RUN_CMD)
+    if P.VERBOSITY>0:
+        print('FIND RIG: Running command=',P.RUN_CMD)
     if P.sock:
         reply=P.sock.get_response(P.RUN_CMD)
     else:

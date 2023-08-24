@@ -76,9 +76,9 @@ elif True:
     # This works on windoz & linux - New pathway
     for rig_name in P.rig:
         if rig_name[0:2]=='IC':
-            ICOM=True
+            ICOM=rig_name
         else:
-            ICOM=False
+            ICOM=None
         port=find_serial_device(rig_name,0,VERBOSITY=P.VERBOSITY)
         for baud in [38400]:
 
@@ -97,7 +97,7 @@ elif True:
                     #print('rig2=',rig[2])
                     
                 P.sock = rig[2]
-                if rig[1]=='IC9700':
+                if rig[1]=='IC9700' or rig[1]=='IC7300':
                     # Set time - why ????!!!!
                     #sock.set_date_time()
                     pass
@@ -166,7 +166,7 @@ else:
                     #print('rig2=',rig[2])
                     
                 P.sock = rig[2]
-                if rig[1]=='IC9700':
+                if rig[1]=='IC9700' or rig[1]=='IC7300':
                     # Set time - why ????!!!!
                     #sock.set_date_time()
                     pass

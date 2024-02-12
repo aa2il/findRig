@@ -2,7 +2,7 @@
 ############################################################################
 #
 # Find Rig - Rev 1.0
-# Copyright (C) 2021-3 by Joseph B. Attili, aa2il AT arrl DOT net
+# Copyright (C) 2021-4 by Joseph B. Attili, aa2il AT arrl DOT net
 #
 # Script to determine rig type attached to a serial port and do any common
 # inits.
@@ -23,8 +23,8 @@
 
 import sys
 from os import listdir
-from rig_io.direct_io import try_port
-import rig_io.socket_io as socket_io
+from rig_io import try_port
+from rig_io import socket_io
 from params import *
 from pprint import pprint
 import serial.tools.list_ports

@@ -58,6 +58,8 @@ class PARAMS:
                               type=int,default=None)
         arg_proc.add_argument("-MON", help="Monitor Level",
                               type=int,default=None)
+        arg_proc.add_argument("-ANT", help="Antenna",
+                              type=int,default=None)
         arg_proc.add_argument("-BREAK", help="Break-in on/off",
                               type=int,default=None)
         arg_proc.add_argument("-TUNER", help="Tuner On/Off",
@@ -68,6 +70,8 @@ class PARAMS:
                               type=int,default=None)
         arg_proc.add_argument("-A2B", help="Copy VFO A to VFO B",
                               action='store_true')
+        arg_proc.add_argument("-IFSHIFT", help="IF Shift",
+                              type=int,default=None)
         arg_proc.add_argument("-w", help="Rig command",
                               type=str,default=None)
         arg_proc.add_argument("-verbosity", help="VERBOSITY",
@@ -96,6 +100,8 @@ class PARAMS:
         self.RUN_CMD   = args.w
         self.SET_PWR   = args.PWR
         self.SET_MON   = args.MON
+        self.SET_ANT   = args.ANT
+        self.SET_IFSHIFT = args.IFSHIFT
         self.SET_BREAK = args.BREAK
         self.SET_TUNER = args.TUNER
         self.SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None

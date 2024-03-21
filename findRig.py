@@ -232,6 +232,16 @@ if P.SET_MON!=None:
         print('FIND RIG: SETTTNG MONITOR=',P.SET_MON)
     P.sock.set_monitor_gain(P.SET_MON)
     
+if P.SET_ANT!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTTNG ANTENNA=',P.SET_ANT)
+    P.sock.set_ant(P.SET_ANT)
+    
+if P.SET_IFSHIFT!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTTNG IFSHIFT=',P.SET_IFSHIFT)
+    P.sock.set_if_shift(P.SET_IFSHIFT)
+    
 if P.sock and P.SET_BREAK!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: SETTING BREAK-IN=',P.SET_BREAK)
@@ -256,7 +266,7 @@ if P.COPY_A2B:
 if P.RUN_CMD!=None:
     if rig in ["FTdx3000","FT991a"]:
         P.RUN_CMD=P.RUN_CMD.replace("'","")+';'
-    if P.VERBOSITY>0:
+    if P.VERBOSITY>0 or True:
         print('FIND RIG: Running command=',P.RUN_CMD)
     if P.sock:
         reply=P.sock.get_response(P.RUN_CMD)

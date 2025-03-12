@@ -1,8 +1,11 @@
-#! /usr/bin/python3
+#! /home/joea/miniconda3/envs/aa2il/bin/python -u
+#
+# NEW: /home/joea/miniconda3/envs/aa2il/bin/python -u
+# OLD: /usr/bin/python3 -u 
 ############################################################################
 #
 # Find Rig - Rev 1.0
-# Copyright (C) 2021-4 by Joseph B. Attili, aa2il AT arrl DOT net
+# Copyright (C) 2021-5 by Joseph B. Attili, joe DOT aa2il AT gmail DOT com
 #
 # Script to determine rig type attached to a serial port and do any common
 # inits.
@@ -79,13 +82,13 @@ elif True:
             ICOM=rig_name
         else:
             ICOM=None
-        port=find_serial_device(rig_name,0,VERBOSITY=P.VERBOSITY)
+        port,vid_pid=find_serial_device(rig_name,0,VERBOSITY=P.VERBOSITY)
         for baud in [38400]:
 
             # Try to illicit a response from a rig on this port
             rig=try_port(port,baud,P.VERBOSITY,ICOM=ICOM)
             if P.VERBOSITY>0:
-                print('rig_name=',rig_name,'\tport=',port,'\trig=',rig)
+                print('FIND RIG: rig_name=',rig_name,'\tport=',port,'\trig=',rig)
 
             if rig:
 

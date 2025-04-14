@@ -109,7 +109,8 @@ elif True:
                     try:
                         P.sock.set_power(99)
                         P.sock.tuner(1)
-                        P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set
+                        #P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set - Old style b4 4.6.2
+                        P.sock.get_response('W EX177100; 0')         # Make sure max TX is also set
                     except:
                         break
                 elif rig[1]=='FT991a':
@@ -177,7 +178,8 @@ else:
                     # Make sure full-power and ant tuner is on
                     P.sock.set_power(99)
                     P.sock.tuner(1)
-                    P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set
+                    #P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set  - Old style b4 4.6.2
+                    P.sock.get_response('W EX177100; 0')         # Make sure max TX is also set
                 elif rig[1]=='FT991a':
                     # Turn off split mode - this rig seems to get into split quite a bit
                     #print('Hey')
@@ -263,7 +265,8 @@ if P.SET_FRONT_END:
 if P.COPY_A2B:
     if P.VERBOSITY>0:
         print('FIND RIG: COPY a to B ...')
-    P.sock.get_response('BY;AB;')
+    #P.sock.get_response('BY;AB;')                # Old style b4 4.6.2
+    P.sock.get_response('W AB; 0') 
     #sock.set_vfo(op='A->B')
     
 if P.RUN_CMD!=None:

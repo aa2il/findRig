@@ -8,6 +8,49 @@ The following rigs are supported:
     * ICOM 9700
     * ICOM 706
     
+# Installation under Linux using uv:
+
+0) This seems to be the easiest/best solution.  You will need to install uv on your system (once):
+
+      curl -LsSf https://astral.sh/uv/install.sh | sh      
+      rehash     
+
+1) Clone gitub findRig, libs and data repositories
+      
+      cd
+      mkdir Python
+      cd Python
+      git clone https://github.com/aa2il/findRig
+      git clone https://github.com/aa2il/libs
+      git clone https://github.com/aa2il/data
+
+2) One of the features of uv is that the virtual environment is included in the github repository.  You should NOT have to do anything since uv will install the environment and required packages the first time you run wclock.:
+
+For the record, here is how I set up the environment:
+
+     cd ~/Python/findRig
+     uv init
+     rm main.py
+     uv add -r requirements.txt
+
+Note: this is a CLI toolwith no gui so there is no problem with tk.
+
+3) Make sure its executable and set PYTHON PATH so os can find libraries:
+
+     cd ~/Python/findRig.py
+     chmod +x findRig.py
+
+   - Under tcsh:      setenv PYTHONPATH $HOME/Python/libs
+   - Under bash:      export PYTHONPATH="$HOME/Python/libs"
+   
+4) Bombs away:
+
+     uv run findRig.py
+
+   or, 
+
+     ./findRig.py
+
 # Installation under Linux:
 
 1) Uses python3

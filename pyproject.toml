@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "numpy>=2.2.5",
+    "numpy>=2.3.0",
     "psutil>=7.0.0",
     "pyserial>=3.5",
     "pytz>=2025.2",

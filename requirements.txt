@@ -1,4 +1,19 @@
-# pip3 install -r requirements.txt
+###############################################################################
+#
+# Under uv:
+#     rm -r .venv/ pyproject.toml .python-version uv.lock
+#     uv init
+#     uv add -r requirements.txt
+#
+# Since we often run this script from another directory, embed the dependencies
+# in the script itself:
+#
+#     uv add --script findRig.py -r requirements.txt
+#
+# This was how this all used to work:
+#     pip3 install -r requirements.txt
+#
+###############################################################################
 #
 # Also need the "libs" and "data" directories which are available in this
 # repository.
@@ -6,6 +21,8 @@
 # e.g. for csh/tcsh:
 #
 #     setenv PYTHONPATH $HOME/Python/libs
+###############################################################################
+#
 
 pyserial
 pytz

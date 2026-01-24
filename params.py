@@ -46,11 +46,17 @@ class PARAMS:
                               choices=CONNECTIONS+['NONE']+RIGS)
         arg_proc.add_argument("-port", help="Connection Port",
                               type=int,default=0)
+        arg_proc.add_argument("-f", help="Get rig freq",
+                              action='store_true')
+        arg_proc.add_argument("-F", help="Set rig freq",
+                              type=float)
+        arg_proc.add_argument("-vfo", help="Select VFO",
+                              type=str,default='A')
         arg_proc.add_argument("-m", help="Get rig mode",
                               action='store_true')
         arg_proc.add_argument("-M", help="Set rig mode",
                               type=str,default=None,
-                              choices=['CW','SSB','RTTY'])
+                              choices=['CW','SSB','RTTY','FM','AM','USB','LSB','CWR'])
         arg_proc.add_argument("-FILT", help="Set rig filter",
                               type=str,default=None,
                               choices=['Narrow','Wide'])
@@ -94,6 +100,9 @@ class PARAMS:
             self.connection = None
             self.rig        = RIGS
     
+        self.GET_FREQ  = args.f
+        self.SET_FREQ  = args.F
+        self.VFO       = args.vfo
         self.GET_MODE  = args.m
         self.SET_MODE  = args.M
         self.SET_FILT  = args.FILT

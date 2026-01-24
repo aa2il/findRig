@@ -219,17 +219,29 @@ if P.VERBOSITY>0:
         print('rig_type =',P.sock.rig_type)
         print('rig_type1=',P.sock.rig_type1)
         print('rig_type2=',P.sock.rig_type2)
-    
+
+if P.GET_FREQ:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Getting freq ... VFO=',P.VFO)
+    freq=P.sock.get_freq(VFO=P.VFO,VERBOSITY=P.VERBOSITY)
+    print('freq=',freq)
+
+#print('SET_FREQ=',P.SET_FREQ,P.VERBOSITY)
+if P.SET_FREQ!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Setting freq ...',P.SET_FREQ,P.VFO)
+    P.sock.set_freq(P.SET_FREQ,VFO=P.VFO,VERBOSITY=P.VERBOSITY)
+
 if P.GET_MODE:
     if P.VERBOSITY>0:
-        print('FIND RIG: Getting mode ...')
-    mode=P.sock.get_mode()
+        print('FIND RIG: Getting mode ... VFO=',P.VFO)
+    mode=P.sock.get_mode(VFO=P.VFO)
     print('mode=',mode)
 
 if P.SET_MODE!=None:
     if P.VERBOSITY>0:
-        print('FIND RIG: Setting mode ...')
-    P.sock.set_mode(P.SET_MODE)
+        print('FIND RIG: Setting mode ... VFO=',P.VFO)
+    P.sock.set_mode(P.SET_MODE,VFO=P.VFO)
     
 if P.SET_FILT!=None:
     if P.VERBOSITY>0:

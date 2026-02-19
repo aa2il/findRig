@@ -283,6 +283,11 @@ if P.SET_FRONT_END:
         print('FIND RIG: SETTING FRONT END=',P.AMP,P.ATTEN)
     P.sock.frontend(1,P.PAMP,P.ATTEN)
 
+if P.APF!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTING APF=',P.APF)
+    P.sock.set_apf(P.APF)
+    
 if P.COPY_A2B:
     if P.VERBOSITY>0:
         print('FIND RIG: COPY a to B ...')

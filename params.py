@@ -72,6 +72,8 @@ class PARAMS:
                               type=int,default=None)
         arg_proc.add_argument("-PAMP", help="Set Pre-amp",
                               type=int,default=None)
+        arg_proc.add_argument("-APF", help="Set APF on/off",
+                              type=int,default=None)
         arg_proc.add_argument("-ATTEN", help="Set Attenuator",
                               type=int,default=None)
         arg_proc.add_argument("-A2B", help="Copy VFO A to VFO B",
@@ -116,6 +118,7 @@ class PARAMS:
         self.SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None
         self.COPY_A2B  = args.A2B
         self.PAMP      = args.PAMP
+        self.APF       = args.APF
         self.ATTEN     = args.ATTEN
 
         #print('Hey:',args.m,GET_MODE)

@@ -60,6 +60,8 @@ class PARAMS:
         arg_proc.add_argument("-FILT", help="Set rig filter",
                               type=str,default=None,
                               choices=['Narrow','Wide'])
+        arg_proc.add_argument("-BW", help="Bandwidth",
+                              type=int,default=None)
         arg_proc.add_argument("-PWR", help="Rig Power",
                               type=int,default=None)
         arg_proc.add_argument("-MON", help="Monitor Level",
@@ -73,6 +75,8 @@ class PARAMS:
         arg_proc.add_argument("-PAMP", help="Set Pre-amp",
                               type=int,default=None)
         arg_proc.add_argument("-APF", help="Set APF on/off",
+                              type=int,default=None)
+        arg_proc.add_argument("-MIC", help="Set Mic Gain",
                               type=int,default=None)
         arg_proc.add_argument("-ATTEN", help="Set Attenuator",
                               type=int,default=None)
@@ -108,6 +112,7 @@ class PARAMS:
         self.GET_MODE  = args.m
         self.SET_MODE  = args.M
         self.SET_FILT  = args.FILT
+        self.SET_BW    = args.BW
         self.RUN_CMD   = args.w
         self.SET_PWR   = args.PWR
         self.SET_MON   = args.MON
@@ -119,6 +124,7 @@ class PARAMS:
         self.COPY_A2B  = args.A2B
         self.PAMP      = args.PAMP
         self.APF       = args.APF
+        self.MIC_GAIN  = args.MIC
         self.ATTEN     = args.ATTEN
 
         #print('Hey:',args.m,GET_MODE)

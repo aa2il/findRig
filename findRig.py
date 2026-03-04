@@ -235,7 +235,7 @@ if P.SET_FREQ!=None:
 if P.GET_MODE:
     if P.VERBOSITY>0:
         print('FIND RIG: Getting mode ... VFO=',P.VFO)
-    mode=P.sock.get_mode(VFO=P.VFO)
+    mode,bw=P.sock.get_mode(VFO=P.VFO)
     print('mode=',mode)
 
 if P.SET_MODE!=None:
@@ -247,6 +247,11 @@ if P.SET_FILT!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: Setting filter ...')
     P.sock.set_filter(P.SET_FILT,P.SET_MODE)
+    
+if P.SET_BW!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Setting bandwidth ...')
+    P.sock.set_filter(P.SET_BW,P.SET_MODE,P.VERBOSITY)
     
 if P.SET_PWR!=None:
     if P.VERBOSITY>0:
@@ -287,6 +292,11 @@ if P.APF!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: SETTING APF=',P.APF)
     P.sock.set_apf(P.APF)
+    
+if P.MIC_GAIN!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTING MIC GAIN=',P.MIC_GAIN)
+    P.sock.mic_setting('SSB',1,lvl=P.MIC_GAIN)
     
 if P.COPY_A2B:
     if P.VERBOSITY>0:

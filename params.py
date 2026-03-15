@@ -57,6 +57,11 @@ class PARAMS:
         arg_proc.add_argument("-M", help="Set rig mode",
                               type=str,default=None,
                               choices=['CW','SSB','RTTY','FM','AM','USB','LSB','CWR'])
+        arg_proc.add_argument("-span", help="Get spectrum span",
+                              action='store_true')
+        arg_proc.add_argument("-SPAN", help="Set spectrum span",
+                              type=int,default=None,
+                             choices=[5,10,20,50,100,200,500,1000])
         arg_proc.add_argument("-FILT", help="Set rig filter",
                               type=str,default=None,
                               choices=['Narrow','Wide'])
@@ -111,6 +116,8 @@ class PARAMS:
         self.VFO       = args.vfo
         self.GET_MODE  = args.m
         self.SET_MODE  = args.M
+        self.GET_SPAN  = args.span
+        self.SET_SPAN  = args.SPAN
         self.SET_FILT  = args.FILT
         self.SET_BW    = args.BW
         self.RUN_CMD   = args.w

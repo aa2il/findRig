@@ -248,6 +248,17 @@ if P.SET_FILT!=None:
         print('FIND RIG: Setting filter ...')
     P.sock.set_filter(P.SET_FILT,P.SET_MODE)
     
+if P.GET_SPAN:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Getting spectrum display span ...')
+    span=P.sock.spectrum(-1,0)
+    print('span=',span)
+
+if P.SET_SPAN!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: Setting spectrum display span to',P.SET_SPAN,' KHz ...')
+    P.sock.spectrum(1,P.SET_SPAN)
+    
 if P.SET_BW!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: Setting bandwidth ...')

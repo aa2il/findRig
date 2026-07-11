@@ -14,7 +14,7 @@
 ############################################################################
 #
 # Find Rig - Rev 1.0
-# Copyright (C) 2021-5 by Joseph B. Attili, joe DOT aa2il AT gmail DOT com
+# Copyright (C) 2021-6 by Joseph B. Attili, joe DOT aa2il AT gmail DOT com
 #
 # Script to determine rig type attached to a serial port and do any common
 # inits.
@@ -308,6 +308,17 @@ if P.MIC_GAIN!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: SETTING MIC GAIN=',P.MIC_GAIN)
     P.sock.mic_setting('SSB',1,lvl=P.MIC_GAIN)
+    
+if P.POWER_SWITCH!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTING Rig POWER SWITCH=',P.POWER_SWITCH)
+    ps=P.sock.power_switch(P.POWER_SWITCH,P.VERBOSITY)
+    if P.VERBOSITY>0:
+        print('\tps=',ps)
+    if ps==None:
+        print('\nIs power supply turned on?\n')
+    elif not ps:
+        print('\nRig appears to be available but is turned off\n')
     
 if P.COPY_A2B:
     if P.VERBOSITY>0:

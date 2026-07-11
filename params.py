@@ -2,7 +2,7 @@
 ################################################################################
 #
 # Params.py - Rev 1.0
-# Copyright (C) 2021-5 by Joseph B. Attili, joe DOT aa2il AT gmail DOT com
+# Copyright (C) 2021-6 by Joseph B. Attili, joe DOT aa2il AT gmail DOT com
 #
 # Command line param parser for pyKeyer.
 #
@@ -83,6 +83,8 @@ class PARAMS:
                               type=int,default=None)
         arg_proc.add_argument("-MIC", help="Set Mic Gain",
                               type=int,default=None)
+        arg_proc.add_argument("-SWITCH", help="Set rig power switch",
+                              type=int,default=None)
         arg_proc.add_argument("-ATTEN", help="Set Attenuator",
                               type=int,default=None)
         arg_proc.add_argument("-A2B", help="Copy VFO A to VFO B",
@@ -132,6 +134,7 @@ class PARAMS:
         self.PAMP      = args.PAMP
         self.APF       = args.APF
         self.MIC_GAIN  = args.MIC
+        self.POWER_SWITCH = args.SWITCH
         self.ATTEN     = args.ATTEN
 
         #print('Hey:',args.m,GET_MODE)

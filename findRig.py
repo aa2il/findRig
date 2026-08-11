@@ -116,7 +116,7 @@ elif True:
                 elif rig[1]=='FTdx3000':
                     # Make sure full-power and ant tuner is on
                     try:
-                        P.sock.set_power(99)
+                        P.sock.set_power(99,PMAX=99)
                         P.sock.tuner(1)
                         #P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set - Old style b4 4.6.2
                         P.sock.get_response('W EX177100; 0')         # Make sure max TX is also set
@@ -185,7 +185,7 @@ else:
                     pass
                 elif rig[1]=='FTdx3000':
                     # Make sure full-power and ant tuner is on
-                    P.sock.set_power(99)
+                    P.sock.set_power(99,PMAX=99)
                     P.sock.tuner(1)
                     #P.sock.get_response('BY;EX177100;')         # Make sure max TX is also set  - Old style b4 4.6.2
                     P.sock.get_response('W EX177100; 0')         # Make sure max TX is also set
@@ -267,7 +267,7 @@ if P.SET_BW!=None:
 if P.SET_PWR!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: SETTING POWER=',P.SET_PWR)
-    P.sock.set_power(P.SET_PWR)
+    P.sock.set_power(P.SET_PWR,PMAX=99,VERBOSITY=P.VERBOSITY)
     
 if P.SET_MON!=None:
     if P.VERBOSITY>0:

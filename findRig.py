@@ -34,12 +34,11 @@
 ############################################################################
 
 import sys
-from os import listdir
-from rig_io import try_port
-from rig_io import socket_io
+#from os import listdir
+from rig_io import try_port,socket_io
 from params import *
 from pprint import pprint
-import serial.tools.list_ports
+#import serial.tools.list_ports
 from utilities import find_serial_device
 
 ############################################################################
@@ -66,7 +65,8 @@ if P.connection:
         print('\nOpening',P.connection,' connection to rig',
               P.rig,' on port',P.PORT,'...')
     P.sock = socket_io.open_rig_connection(P.connection,0,P.PORT,0,
-                                           'PROBE',rig=P.rig)
+                                           'PROBE',rig=P.rig,
+                                           quiet=P.VERBOSITY==0)
     
     if not P.sock.active:
         print('*** No connection available to rig ***')
@@ -126,7 +126,7 @@ elif True:
                 elif rig[1]=='FT991a':
                     # Turn off split mode - this rig seems to get into split quite a bit
                     #print('Hey')
-                    P.sock.split_mode(0)
+                    P.sock.split_mode(0,VERBOSITY=1)
                 
                 #sys.exit(0)
                 rig=rig[1]
@@ -135,6 +135,7 @@ elif True:
             continue         # Iterate outer loop if we didn't break
         break                # Quit outer loop if we did break
 
+"""    
 else:          
     
     # Old pathway
@@ -194,7 +195,7 @@ else:
                 elif rig[1]=='FT991a':
                     # Turn off split mode - this rig seems to get into split quite a bit
                     #print('Hey')
-                    P.sock.split_mode(0)
+                    P.sock.split_mode(0,VERBOSITY=1)
                 
                 #sys.exit(0)
                 rig=rig[1]
@@ -202,6 +203,7 @@ else:
         else:
             continue         # Iterate outer loop if we didn't break
         break                # Quit outer loop if we did break
+"""
 
 # Print final result or None if nothing found
 if type(rig)==list:
@@ -307,6 +309,11 @@ if P.APF!=None:
         print('FIND RIG: SETTING APF=',P.APF)
     P.sock.set_apf(P.APF)
     
+if P.SET_SPLIT!=None:
+    if P.VERBOSITY>0:
+        print('FIND RIG: SETTING SPLIT=',P.SET_SPLIT)
+    P.sock.split_mode(P.SET_SPLIT,VERBOSITY=1)
+    
 if P.MIC_GAIN!=None:
     if P.VERBOSITY>0:
         print('FIND RIG: SETTING MIC GAIN=',P.MIC_GAIN)
@@ -320,9 +327,11 @@ if P.POWER_SWITCH!=None:
     if P.VERBOSITY>0:
         print('\tps=',ps)
     if ps==None:
-        print('\nIs power supply turned on?\n')
-    elif not ps:
-        print('\nRig appears to be available but is turned off\n')
+        print('Is power supply turned on?\n')
+    elif ps:
+        print('Rig is powered up')
+    else:
+        print('Rig appears to be available but is turned off')
     
 if P.COPY_A2B:
     if P.VERBOSITY>0:
@@ -341,5 +350,4 @@ if P.RUN_CMD!=None:
     else:
         reply=None
     print(reply)
-    
     

@@ -83,6 +83,8 @@ class PARAMS:
                               type=int,default=None)
         arg_proc.add_argument("-MIC", help="Set Mic Gain",
                               type=int,default=None)
+        arg_proc.add_argument("-SPLIT", help="Set Split On/Off",
+                              type=int,default=None)
         arg_proc.add_argument("-SWITCH", help="Set rig power switch",
                               type=int,default=None)
         arg_proc.add_argument("-ATTEN", help="Set Attenuator",
@@ -113,29 +115,30 @@ class PARAMS:
             self.connection = None
             self.rig        = RIGS
     
-        self.GET_FREQ  = args.f
-        self.SET_FREQ  = args.F
-        self.VFO       = args.vfo
-        self.GET_MODE  = args.m
-        self.SET_MODE  = args.M
-        self.GET_SPAN  = args.span
-        self.SET_SPAN  = args.SPAN
-        self.SET_FILT  = args.FILT
-        self.SET_BW    = args.BW
-        self.RUN_CMD   = args.w
-        self.SET_PWR   = args.PWR
-        self.SET_MON   = args.MON
-        self.SET_ANT   = args.ANT
-        self.SET_IFSHIFT = args.IFSHIFT
-        self.SET_BREAK = args.BREAK
-        self.SET_TUNER = args.TUNER
+        self.GET_FREQ      = args.f
+        self.SET_FREQ      = args.F
+        self.VFO           = args.vfo
+        self.GET_MODE      = args.m
+        self.SET_MODE      = args.M
+        self.GET_SPAN      = args.span
+        self.SET_SPAN      = args.SPAN
+        self.SET_FILT      = args.FILT
+        self.SET_BW        = args.BW
+        self.RUN_CMD       = args.w
+        self.SET_PWR       = args.PWR
+        self.SET_MON       = args.MON
+        self.SET_ANT       = args.ANT
+        self.SET_IFSHIFT   = args.IFSHIFT
+        self.SET_BREAK     = args.BREAK
+        self.SET_TUNER     = args.TUNER
         self.SET_FRONT_END = args.PAMP!=None or args.ATTEN!=None
-        self.COPY_A2B  = args.A2B
-        self.PAMP      = args.PAMP
-        self.APF       = args.APF
-        self.MIC_GAIN  = args.MIC
-        self.POWER_SWITCH = args.SWITCH
-        self.ATTEN     = args.ATTEN
+        self.COPY_A2B      = args.A2B
+        self.PAMP          = args.PAMP
+        self.APF           = args.APF
+        self.SET_SPLIT     = args.SPLIT
+        self.MIC_GAIN      = args.MIC
+        self.POWER_SWITCH  = args.SWITCH
+        self.ATTEN         = args.ATTEN
 
         #print('Hey:',args.m,GET_MODE)
         #print('Hey:',args.PAMP,args.ATTEN,SET_FRONT_END)

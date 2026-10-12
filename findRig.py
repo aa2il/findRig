@@ -1,6 +1,6 @@
 #!/usr/bin/env -S uv run --script --quiet
-# /// script
-# requires-python = ">=3.13"
+#/// script
+# requires-python = ">=3.12"
 # dependencies = [
 #     "numpy",
 #     "psutil",
@@ -8,6 +8,8 @@
 #     "pytz",
 # ]
 # ///
+
+# Disable lines with /// if no internet!
 
 # NEW: /home/joea/miniconda3/envs/aa2il/bin/python -u
 # OLD: /usr/bin/python3 -u 
